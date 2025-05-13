@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/drawing_point.dart';
+import 'drawing_point.dart';
 
 class DrawingProvider with ChangeNotifier {
     List<List<DrawingPoint>> _history = [];
     int _historyIndex = -1;
 
-    List<List<DrawingPoint>> get currentPath => 
+    List<List<DrawingPoint>> get currentPaths => 
         _history.sublist(0, _historyIndex + 1);
 
     void addPath(List<DrawingPoint> path) {

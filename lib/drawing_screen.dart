@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/drawing_point.dart';
-import '../providers/drawing_provider.dart';
-import '../widgets/drawing_canvas.dart';
+import 'drawing_point.dart';
+import 'drawing_provider.dart';
+import 'drawing_canvas.dart';
 
 class DrawingScreen extends StatefulWidget {
     const DrawingScreen({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class DrawingScreen extends StatefulWidget {
 }
 
 class _DrawingScreenState extends State<DrawingScreen> {
-    List<List<DrawingPoint>> _currentPath = [];
+    List<DrawingPoint> _currentPath = [];
 
     Paint _newPaint() {
         return Paint()
@@ -34,8 +34,10 @@ class _DrawingScreenState extends State<DrawingScreen> {
                 ],
             ),
             body: GestureDetector(
-                onPanUpdate: (details) {
-                    _currentPath = [DrawingPoint(point: details.localPosition, paint: _newPaint())];
+                onPanStart: (details) {
+                    setState(() {
+                        _currentPath = [DrawingPoint(point: details.localPosition, paint: _newPaint())];
+                    });
                 },
                 onPanUpdate: (details) {
                     setState(() {
@@ -50,7 +52,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                     children: [
                         DrawingCanvas(paths: provider.currentPaths),
                         CustomPaint(
-                            painter: _DrawingPainter(path: [_currentPath]),
+                            painter: _DrawingPainter(paths: [_currentPath]),
                             size: Size.infinite,
                         )
                     ],

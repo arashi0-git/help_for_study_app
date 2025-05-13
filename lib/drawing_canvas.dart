@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/drawing_point.dart';
+import 'drawing_point.dart';
 
 class DrawingCanvas extends StatelessWidget {
     final List<List<DrawingPoint>> paths;
