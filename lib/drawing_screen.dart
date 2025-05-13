@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'drawing_point.dart';
 import 'drawing_painter.dart';
@@ -34,11 +35,11 @@ class _DrawingScreenState extends State<DrawingScreen> {
 
     final InputImage inputImage = InputImage.fromBytes(
       bytes: pngBytes,
-      inputImageData: InputImageData(
+      metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
-        imageRotation: InputImageRotation.rotation0deg,
-        inputImageFormat: InputImageFormat.bgra8888,
-        planeData: [],
+        rotation: InputImageRotation.rotation0deg,
+        format: InputImageFormat.bgra8888,
+        bytesPerRow: image.width * 4,
       ),
     );
 

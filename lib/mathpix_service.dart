@@ -26,4 +26,5 @@ Future<String> recognizeMathpix(Uint8List imageBytes) async {
         final data = json.decode(response.body);
         return data['latex_simplified'] ?? '数式が見つかりませんでした';
     }
+    return 'エラーが発生しました: ${response.statusCode}';
 }
