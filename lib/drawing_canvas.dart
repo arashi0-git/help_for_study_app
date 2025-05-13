@@ -8,7 +8,7 @@ class DrawingCanvas extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-        return CustomPoint(
+        return CustomPaint(
             painter: _DrawingPointer(paths: paths),
             size: Size.infinite,
         );
