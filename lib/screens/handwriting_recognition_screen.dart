@@ -50,6 +50,10 @@ class _HandwritingRecognitionScreenState extends State<HandwritingRecognitionScr
       ),
       body: Column(
         children: [
+          const Text(
+            '※ 数式は大きく・はっきりと書いてください\n（細い線や小さい文字は認識しにくいです）',
+            style: TextStyle(color: Colors.red, fontSize: 14),
+          ),
           Expanded(
             child: Signature(
               controller: _controller,

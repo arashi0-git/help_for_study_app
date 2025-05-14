@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'drawing_screen.dart';
+import 'screens/handwriting_recognition_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '手書きOCRデモ',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const DrawingScreen(),
+      home: const HandwritingRecognitionScreen(),
     );
   }
 }
