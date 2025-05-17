@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "736662120288",
+    "project_id": "help-for-study-app",
+    "storage_bucket": "help-for-study-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736662120288:android:097c52653e13846b246005",
+        "android_client_info": {
+          "package_name": "com.example.helper_for_study"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUNOwpOaIYPIL5LMZd5CbB3LoQU9YWNZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

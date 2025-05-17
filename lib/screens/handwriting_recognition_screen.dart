@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'ai_result_screen.dart';
 import 'sympy.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<Uint8List> addPaddingToImage(Uint8List pngBytes, {int padding = 40}) async {
   final codec = await ui.instantiateImageCodec(pngBytes);
@@ -42,11 +43,11 @@ class _HandwritingRecognitionScreenState extends State<HandwritingRecognitionScr
 
   // 問題リスト（表示用とLaTeX用）
   final List<Map<String, String>> _problems = [
-    {'display': 'x² + 4x + x² - 3x =', 'latex': 'x^{2} + 4x + x^{2} - 3x ='},
-    {'display': '2x² - x + 5 - x =', 'latex': '2x^{2} - x + 5 - x ='},
-    {'display': 'x² + 2x + 1 - 4 =', 'latex': 'x^{2} + 2x + 1 - 4 ='},
-    {'display': '3x² - 7x + 2 + 5x =', 'latex': '3x^{2} - 7x + 2 + 5x ='},
-    {'display': 'x² - 4x + 3x² - 2x =', 'latex': 'x^{2} - 4x + 3x^{2} - 2x ='},
+    {'display': 'x² + 4x + x² - 2x + 4 =', 'latex': 'x^{2} + 4x + x^{2} - 2x + 4 ='},
+    {'display': '2x² - x + 5 - 3x - 2=', 'latex': '2x^{2} - x + 5 - 3x - 2='},
+    {'display': '2x² + 2x + 1 - 4 + x=', 'latex': '2x^{2} + 2x + 1 - 4 + x='},
+    {'display': '3x² - 6x + 2 + 5x + - 5=', 'latex': '3x^{2} - 6x + 2 + 5x + - 5='},
+    {'display': 'x² - 4x + 3x² - 2x + 1 =', 'latex': 'x^{2} - 4x + 3x^{2} - 2x + 1 ='},
   ];
   int _currentProblemIndex = 0;
   String _aiResult = '';
@@ -226,9 +227,57 @@ class _HandwritingRecognitionScreenState extends State<HandwritingRecognitionScr
                   '問題:  ${_problems[_currentProblemIndex]['display']}',
                   style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                ElevatedButton(
-                  onPressed: _nextProblem,
-                  child: const Text('次の問題'),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: _nextProblem,
+                      child: const Text('次の問題'),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: () async {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => const Center(child: CircularProgressIndicator()),
+                        );
+                        try {
+                          final newProblem = await _ragScoringService.generateNewProblem();
+                          await saveGeneratedProblem(newProblem);
+                          if (mounted) {
+                            Navigator.of(context).pop();
+                            setState(() {
+                              _problems.add({
+                                'display': newProblem['problem'] ?? '',
+                                'latex': newProblem['problem'] ?? '', // 必要に応じてLaTeX変換
+                              });
+                              _currentProblemIndex = _problems.length - 1;
+                              _aiResult = '';
+                              _recognizedText = '';
+                            });
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            Navigator.of(context).pop();
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('エラー'),
+                                content: Text('AIによる問題生成に失敗しました: $e'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: const Text('閉じる'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('AI新規問題を生成'),
+                    ),
+                  ],
                 ),
               ],
             ),
